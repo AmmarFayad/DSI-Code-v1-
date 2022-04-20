@@ -3,8 +3,10 @@ import torch
 import math
 
 
-def rand_slices():
-    pass
+def rand_slices(dim, num_slices=1000):
+    slices = torch.randn((num_slices, dim))
+    slices = slices / torch.sqrt(torch.sum(slices ** 2, dim=1, keepdim=True))
+    return slices
 
 def arccos_distance_torch(x1, x2=None, eps=1e-8):
     x2 = x1 if x2 is None else x2
@@ -23,11 +25,11 @@ def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, p=2, omega_X=math.pi/4, omega_Y=m
     X_detach = X.detach()
     Y_detach = Y.detach()
     for _ in range(max_iter):
-        projections = f1(pro_X)
+        projections = f1(pro_X,pro_Y)
         arccos = arccos_distance_torch(projections, projections)
         reg = -lam * (arccos-omega_X)
         encoded_projections_X = X_detach.matmul(projections.transpose(0, 1))
-        projections = f2(pro_Y)
+        projections = f2(pro_X,pro_Y)
         arccos = arccos_distance_torch(projections, projections)
         reg += -lam * (arccos-omega_Y)
         encoded_projections_Y = Y_detach.matmul(projections.transpose(0, 1))
@@ -52,8 +54,8 @@ def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, p=2, omega_X=math.pi/4, omega_Y=m
         f1_op.step()
         f2_op.step()
 
-    projections_X = f1(pro_X)
-    projections_Y = f2(pro_X)
+    projections_X = f1(pro_X,pro_Y)
+    projections_Y = f2(pro_X,pro_Y)
     encoded_projections_X = X.matmul(projections_X.transpose(0, 1))
     encoded_projections_Y = Y.matmul(projections_Y.transpose(0, 1))
 
