@@ -17,7 +17,7 @@ def arccos_distance_torch(x1, x2=None, eps=1e-8):
 def I_est():
     pass
 
-def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, p=2, omega_X=math.pi/4, omega_Y=math.pi/4, max_iter=10, lam=1, device="cuda"):
+def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, omega_X=math.pi/4, omega_Y=math.pi/4, max_iter=10, lam=1, device="cuda"):
     embedding_dim_X = X.size(1)
     pro_X = rand_slices(embedding_dim_X, num_slices).to(device)
     embedding_dim_Y = Y.size(1)
