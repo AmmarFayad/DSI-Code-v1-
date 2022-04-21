@@ -1,3 +1,9 @@
+# Distributional Sliced Information
+
+<img src="https://render.githubusercontent.com/render/math?math=\tau (X,Y)=\sup\oint{I}(\theta^TX,\phi^TY)d\sigma(\theta,\phi)">
+
+
+
 # Transport Dependency
 
 This package provides a few simple functions to compute the transport correlation and other optimal transport based dependency measures as defined here: [Transport dependency: Optimal transport based dependency measures](https://arxiv.org/abs/2105.02073).
@@ -33,3 +39,7 @@ p_val = test["p_val"]
 
 [1] . G. Nies, T. Staudt, and A. Munk. [Transport dependency: Optimal transport based dependency measures](https://arxiv.org/abs/2105.02073)
 arXiv Preprint, 2021.
+
+
+
+
