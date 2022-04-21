@@ -33,7 +33,7 @@ y = [1, 0, 0.3]
 res = tcor(x, y)
 test = permutation_test(x, y, coef=tcor)
 p_val = test["p_val"]
-```
+``` 
 
 #### References
 
