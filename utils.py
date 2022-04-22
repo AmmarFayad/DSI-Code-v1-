@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import math
 import continuous
-
+#
 def rand_slices(dim, num_slices=1000):
     slices = torch.randn((num_slices, dim))
     slices = slices / torch.sqrt(torch.sum(slices ** 2, dim=1, keepdim=True))
