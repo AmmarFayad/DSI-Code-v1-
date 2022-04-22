@@ -1,7 +1,7 @@
 import numpy as np
 import torch
 import math
-
+import continuous
 
 def rand_slices(dim, num_slices=1000):
     slices = torch.randn((num_slices, dim))
@@ -14,8 +14,8 @@ def arccos_distance_torch(x1, x2=None, eps=1e-8):
     w2 = w1 if x2 is x1 else x2.norm(p=2, dim=1, keepdim=True)
     return torch.mean(np.arccos(torch.abs(torch.mm(x1, x2.t()) / (w1 * w2.t()).clamp(min=eps))))
 
-def I_est():
-    pass
+def I_est(x,y):
+    return continuous.get_mi_mvn(x,y)
 
 def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, omega_X=math.pi/4, omega_Y=math.pi/4, max_iter=10, lam=1, device="cuda"):
     embedding_dim_X = X.size(1)
