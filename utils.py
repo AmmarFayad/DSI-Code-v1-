@@ -2,7 +2,22 @@ import numpy as np
 import torch
 import math
 import continuous
+from sklearn.neighbors import NearestNeighbors
 ###
+
+def entropy_KL1(data):
+    #KL entropy estimator, with k=1 nearest neighbor
+    k= 1
+    nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(data.transpose())
+    distances, indices = nbrs.kneighbors(data.transpose())
+    dist_nearest = (distances[:,1]).transpose()
+    if data.shape[0] == 1:
+        vols_nearest = 2*dist_nearest
+    elif data.shape[0] == 2:
+        vols_nearest = np.pi * (dist_nearest)**2
+    Hhat = np.log(k) + .5772156 + (1/data.shape[1]) * np.sum(np.log(data.shape[1]/k*vols_nearest))
+    return Hhat
+
 def rand_slices(dim, num_slices=1000):
     slices = torch.randn((num_slices, dim))
     slices = slices / torch.sqrt(torch.sum(slices ** 2, dim=1, keepdim=True))
@@ -15,7 +30,8 @@ def arccos_distance_torch(x1, x2=None, eps=1e-8):
     return torch.mean(np.arccos(torch.abs(torch.mm(x1, x2.t()) / (w1 * w2.t()).clamp(min=eps))))
 
 def I_est(x,y):
-    return continuous.get_mi_mvn(x,y)
+    # return continuous.get_mi_mvn(x,y)
+    return -entropy_KL1(np.vstack((x, y))) + entropy_KL1(x) + entropy_KL1(y)
 
 def DSI (X, Y, num_slices, f1,f2, f1_op,f2_op, omega_X=math.pi/4, omega_Y=math.pi/4, max_iter=10, lam=1, device="cuda"):
     embedding_dim_X = X.size(1)
