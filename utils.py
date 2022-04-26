@@ -5,9 +5,9 @@ import continuous
 from sklearn.neighbors import NearestNeighbors
 ###
 
-def entropy_KL1(data):
+def entropy_KL1(data,k=1):
     #KL entropy estimator, with k=1 nearest neighbor
-    k= 1
+    
     nbrs = NearestNeighbors(n_neighbors=2, algorithm='ball_tree').fit(data.transpose())
     distances, indices = nbrs.kneighbors(data.transpose())
     dist_nearest = (distances[:,1]).transpose()
