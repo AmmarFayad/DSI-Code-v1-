@@ -300,7 +300,7 @@ def get_mi(x, y, k=1, normalize=None, norm='max', estimator='ksg', workers=1):
         # query with k=k+1 to return the nearest neighbour, not counting the data point itself
         dist, _ = xy_tree.query(xy, k=k+1, p=p, workers=workers)
         epsilon = dist[:, -1]
-
+ 
         # for each point, count the number of neighbours
         # whose distance in the x-subspace is strictly < epsilon
         # repeat for the y subspace

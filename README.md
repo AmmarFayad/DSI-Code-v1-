@@ -28,7 +28,7 @@ pip install transport_dependency
 from transport_dependency import tcor, permutation_test
 x = [[1, 2, 3],
      [4, 5, 6],
-     [7, 8., 9]]
+     [7, 8., 9]] 
 y = [1, 0, 0.3]
 res = tcor(x, y)
 test = permutation_test(x, y, coef=tcor)
