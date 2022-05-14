@@ -210,7 +210,6 @@ for p in args.noise_ratios:
     # print(roc_auc)
 
     AUC=auc(fp_rates, tp_rates)
-    print(AUC)
 
 #dist = dist.probabilities(np.ones(d*d)/(d*d))
 #a=dist.sample()
