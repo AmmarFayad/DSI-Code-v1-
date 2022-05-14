@@ -33,17 +33,20 @@ for p in args.noise_ratios:
     
     X=[]
     Y=[]
+    actual_DP=[]
     for i in range(args.num_points):
         if args.relation=='linear':
             if p>random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 x= random.uniform(0,1)
 
                 y=x
+                dp=1
         
 
         if args.relation=='Parabolic':
@@ -51,11 +54,13 @@ for p in args.noise_ratios:
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 x= random.uniform(0,1)
 
                 y=x**2
+                dp=1
         
         if args.relation=='Ellipse':
             theta = np.arange(0, 360, .5)
@@ -63,28 +68,33 @@ for p in args.noise_ratios:
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 x= .9*np.cos(theta[i])
 
                 y=.9*np.cos(theta[i])
+                dp=1
             
         if args.relation=='Sinusoidal':
             if p>random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 x= random.uniform(0,1)
 
                 y=np.cos(x)
+                dp=1
         
         if args.relation=='Two Sinusoidals':
             if p>random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 if random.random()>.5:
@@ -95,6 +105,7 @@ for p in args.noise_ratios:
                     x= random.uniform(0,1)
 
                     y=np.cos(x+.5)
+                    dp=1
 
         if args.relation=='ZigZag':
             k=args.k
@@ -102,11 +113,13 @@ for p in args.noise_ratios:
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
+                dp=0
                 
             else:
                 x= random.uniform(0,1)
 
                 y=(k*x-math.floor(k*x))*(-1+2*(math.floor(k*x)%2))-(math.floor(k*x)%2)
+                dp=1
             
         if args.relation=="Epicycloid":
             theta = np.arange(0, 360, .5)
@@ -114,10 +127,12 @@ for p in args.noise_ratios:
             if p>random.random():
                 x= random.uniform(-k-2,k+1)
                 y= random.uniform(-k-2,k+1)
+                dp=0
             else:
                 x=(k+1) *np.cos(theta[i]) - np.cos((k+1) *theta[i])
 
                 y=(k+1) *np.sin(theta[i]) - np.sin((k+1) *theta[i])
+                dp=1
 
         if args.relation=="Hypocycloid":
             theta = np.arange(0, 360, .5)
@@ -125,17 +140,21 @@ for p in args.noise_ratios:
             if p>random.random():
                 x= random.uniform(-k-2,k+1)
                 y= random.uniform(-k-2,k+1)
+                dp=0
             else:
                 x=(k-1) *np.cos(theta[i]) - np.cos((k-1) *theta[i])
 
                 y=(k-1) *np.sin(theta[i]) - np.sin((k-1) *theta[i])
+                dp=1
 
 
 
         X.append(np.array([x]))
         Y.append(np.array([y]))
+        actual_DP.append(np.array([dp]))
     X=np.array(X)
     Y=np.array(Y)
+    actual_DP=np.array(actual_DP)
 
     ###############################################################
 
@@ -180,7 +199,7 @@ for p in args.noise_ratios:
             else:
                 y_test_preds.append(0)
                 
-        tp_rate, fp_rate = calc_TP_FP_rate([1], y_test_preds)
+        tp_rate, fp_rate = calc_TP_FP_rate(actual_DP, y_test_preds)
             
         tp_rates.append(tp_rate)
         fp_rates.append(fp_rate)
