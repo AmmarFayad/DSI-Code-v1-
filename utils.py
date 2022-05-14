@@ -219,3 +219,37 @@ def DSI (X, Y, num_slices, omega_X=math.pi/4, omega_Y=math.pi/4, max_iter=2, lam
     
 
     return MI/H
+
+
+
+
+
+import pandas as pd
+
+def calc_TP_FP_rate(y_true, y_pred):
+    
+    # Convert predictions to series with index matching y_true
+    y_pred = pd.Series(y_pred, index=y_true.index)
+    
+    # Instantiate counters
+    TP = 0
+    FP = 0
+    TN = 0
+    FN = 0
+
+    # Determine whether each prediction is TP, FP, TN, or FN
+    for i in y_true.index: 
+        if y_true[i]==y_pred[i]==1:
+           TP += 1
+        if y_pred[i]==1 and y_true[i]!=y_pred[i]:
+           FP += 1
+        if y_true[i]==y_pred[i]==0:
+           TN += 1
+        if y_pred[i]==0 and y_true[i]!=y_pred[i]:
+           FN += 1
+    
+    # Calculate true positive rate and false positive rate
+    tpr = TP / (TP + FN)
+    fpr = FP / (FP + TN)
+
+    return tpr, fpr

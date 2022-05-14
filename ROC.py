@@ -7,152 +7,190 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import MinMaxScaler
 
 from pandas import *
-from utils import DSI
+from utils import DSI,calc_TP_FP_rate
 import re
 import random
 import math
-args=[]
+import argparse
+parser = argparse.ArgumentParser(description = 'ROC EXP')
+
+parser.add_argument('--noise_ratios', action='store', dest='noise_ratios', default=[.5,.6,.7,.8,.9,1],
+                    help='m')
+
+parser.add_argument('--relation', action='store', type=str, dest='relation', default='linear',
+                    help='m')
+
+parser.add_argument('--num_slices', action='store', dest='num_slices', default=300,
+                    help='m')
+
+parser.add_argument('--num_points', action='store', type=int, dest='num_points', default=700,
+                    help='m')
+
+args = parser.parse_args()
 ################### data sets generation
-X=[]
-Y=[]
-p=args.noise_ratio
-for i in args.num_points:
-    if args.relation=='linear':
-        if p>random.random():
 
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            x= random.uniform(0,1)
-
-            y=x
+for p in args.noise_ratios:
     
+    X=[]
+    Y=[]
+    for i in range(args.num_points):
+        if args.relation=='linear':
+            if p>random.random():
 
-    if args.relation=='Parabolic':
-        if p>random.random():
-
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            x= random.uniform(0,1)
-
-            y=x**2
-    
-    if args.relation=='Ellipse':
-        theta = np.arange(0, 360, .5)
-        if p>random.random():
-
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            x= .9*np.cos(theta[i])
-
-            y=.9*np.cos(theta[i])
-        
-    if args.relation=='Sinusoidal':
-        if p>random.random():
-
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            x= random.uniform(0,1)
-
-            y=np.cos(x)
-    
-    if args.relation=='Two Sinusoidals':
-        if p>random.random():
-
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            if random.random()>.5:
                 x= random.uniform(0,1)
-
-                y=np.cos(x)
+                y= random.uniform(0,1)
+                
             else:
                 x= random.uniform(0,1)
 
-                y=np.cos(x+.5)
-
-    if args.relation=='ZigZag':
-        k=args.k
-        if p>random.random():
-
-            x= random.uniform(0,1)
-            y= random.uniform(0,1)
-            
-        else:
-            x= random.uniform(0,1)
-
-            y=(k*x-math.floor(k*x))*(-1+2*(math.floor(k*x)%2))-(math.floor(k*x)%2)
+                y=x
         
-    if args.relation=="Epicycloid":
-        theta = np.arange(0, 360, .5)
-        k=args.k
-        if p>random.random():
-            x= random.uniform(-k-2,k+1)
-            y= random.uniform(-k-2,k+1)
-        else:
-            x=(k+1) *np.cos(theta[i]) - np.cos((k+1) *theta[i])
 
-            y=(k+1) *np.sin(theta[i]) - np.sin((k+1) *theta[i])
+        if args.relation=='Parabolic':
+            if p>random.random():
 
-    if args.relation=="Hypocycloid":
-        theta = np.arange(0, 360, .5)
-        k=args.k
-        if p>random.random():
-            x= random.uniform(-k-2,k+1)
-            y= random.uniform(-k-2,k+1)
-        else:
-            x=(k-1) *np.cos(theta[i]) - np.cos((k-1) *theta[i])
+                x= random.uniform(0,1)
+                y= random.uniform(0,1)
+                
+            else:
+                x= random.uniform(0,1)
 
-            y=(k-1) *np.sin(theta[i]) - np.sin((k-1) *theta[i])
+                y=x**2
+        
+        if args.relation=='Ellipse':
+            theta = np.arange(0, 360, .5)
+            if p>random.random():
+
+                x= random.uniform(0,1)
+                y= random.uniform(0,1)
+                
+            else:
+                x= .9*np.cos(theta[i])
+
+                y=.9*np.cos(theta[i])
+            
+        if args.relation=='Sinusoidal':
+            if p>random.random():
+
+                x= random.uniform(0,1)
+                y= random.uniform(0,1)
+                
+            else:
+                x= random.uniform(0,1)
+
+                y=np.cos(x)
+        
+        if args.relation=='Two Sinusoidals':
+            if p>random.random():
+
+                x= random.uniform(0,1)
+                y= random.uniform(0,1)
+                
+            else:
+                if random.random()>.5:
+                    x= random.uniform(0,1)
+
+                    y=np.cos(x)
+                else:
+                    x= random.uniform(0,1)
+
+                    y=np.cos(x+.5)
+
+        if args.relation=='ZigZag':
+            k=args.k
+            if p>random.random():
+
+                x= random.uniform(0,1)
+                y= random.uniform(0,1)
+                
+            else:
+                x= random.uniform(0,1)
+
+                y=(k*x-math.floor(k*x))*(-1+2*(math.floor(k*x)%2))-(math.floor(k*x)%2)
+            
+        if args.relation=="Epicycloid":
+            theta = np.arange(0, 360, .5)
+            k=args.k
+            if p>random.random():
+                x= random.uniform(-k-2,k+1)
+                y= random.uniform(-k-2,k+1)
+            else:
+                x=(k+1) *np.cos(theta[i]) - np.cos((k+1) *theta[i])
+
+                y=(k+1) *np.sin(theta[i]) - np.sin((k+1) *theta[i])
+
+        if args.relation=="Hypocycloid":
+            theta = np.arange(0, 360, .5)
+            k=args.k
+            if p>random.random():
+                x= random.uniform(-k-2,k+1)
+                y= random.uniform(-k-2,k+1)
+            else:
+                x=(k-1) *np.cos(theta[i]) - np.cos((k-1) *theta[i])
+
+                y=(k-1) *np.sin(theta[i]) - np.sin((k-1) *theta[i])
 
 
 
-    X.append(x)
-    Y.append(y)
+        X.append(np.array([x]))
+        Y.append(np.array([y]))
+    X=np.array(X)
+    Y=np.array(Y)
 
-###############################################################
+    ###############################################################
 
-d=2
-n=100 #1000 to produce acurate joint distributions
-ns=d
-nd=50 #50
-predictions=np.array([])
-# for _ in range(nd):
-#     X = np.random.randn(d, n)
-#     Z = np.random.randn(d, n)
-#     Y1=(((np.matmul(np.ones((1,d)),X)/np.sqrt(d))*np.ones((d,1)))+Z)/np.sqrt(2)
-#     Y=(X+Z)/np.sqrt(2)
-#     dist = Table().domain(Y1,X)
-#     ax=ay=np.empty(shape=[0, n])
-#     for i in range(ns):
-#         r=np.random.randint(d)
-#         a=dist.row(r)
-#         ax=np.vstack([ax,a.X])
-#         ay=np.vstack([ay,a.Y])
-#     DSI_val = sliced_MI(ax,ay, 100)
-#     predictions=np.append(predictions,[DSI_val])
+    
+    predictions=np.array([])
+    # for _ in range(nd):
+    #     X = np.random.randn(d, n)
+    #     Z = np.random.randn(d, n)
+    #     Y1=(((np.matmul(np.ones((1,d)),X)/np.sqrt(d))*np.ones((d,1)))+Z)/np.sqrt(2)
+    #     Y=(X+Z)/np.sqrt(2)
+    #     dist = Table().domain(Y1,X)
+    #     ax=ay=np.empty(shape=[0, n])
+    #     for i in range(ns):
+    #         r=np.random.randint(d)
+    #         a=dist.row(r)
+    #         ax=np.vstack([ax,a.X])
+    #         ay=np.vstack([ay,a.Y])
+    #     DSI_val = sliced_MI(ax,ay, 100)
+    #     predictions=np.append(predictions,[DSI_val])
 
-for _ in range(nd):
-    X = np.random.randn(d, n)
-    Y = np.random.randn(d, n)
+    
     DSI_val= DSI(X,Y, args.num_slices)
-    predictions=np.append(predictions,[DSI_val])
+    predictions=np.append(predictions,[DSI_val.detach().numpy()])
 
-# predictions = (predictions - np.min(predictions)) / (np.max(predictions) - np.min(predictions))
+    # predictions = (predictions - np.min(predictions)) / (np.max(predictions) - np.min(predictions))
 
-actual=np.ones(nd)
-actual=np.append(actual,np.zeros(nd))
-false_positive_rate, true_positive_rate, thresholds = roc_curve(actual, predictions)
-roc_auc = auc(false_positive_rate, true_positive_rate)
-print(roc_auc)
+
+    tp_rates = []
+    fp_rates = []
+
+    # Define probability thresholds to use, between 0 and 1
+    probability_thresholds = np.linspace(0,1,num=100)
+
+    # Find true positive / false positive rate for each threshold
+    for p in probability_thresholds:
+        
+        y_test_preds = []
+        
+        for prob in predictions:
+            if prob > p:
+                y_test_preds.append(1)
+            else:
+                y_test_preds.append(0)
+                
+        tp_rate, fp_rate = calc_TP_FP_rate([1], y_test_preds)
+            
+        tp_rates.append(tp_rate)
+        fp_rates.append(fp_rate)
+
+    # actual=np.ones(1)
+    # false_positive_rate, true_positive_rate, thresholds = roc_curve(actual, predictions)
+    # roc_auc = auc(false_positive_rate, true_positive_rate)
+    # print(roc_auc)
+
+    AUC=auc(fp_rates, tp_rates)
 
 #dist = dist.probabilities(np.ones(d*d)/(d*d))
 #a=dist.sample()
