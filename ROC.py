@@ -36,7 +36,7 @@ for p in args.noise_ratios:
     actual_DP=[]
     for i in range(args.num_points):
         if args.relation=='linear':
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -50,7 +50,7 @@ for p in args.noise_ratios:
         
 
         if args.relation=='Parabolic':
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -64,7 +64,7 @@ for p in args.noise_ratios:
         
         if args.relation=='Ellipse':
             theta = np.arange(0, 360, .5)
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -77,7 +77,7 @@ for p in args.noise_ratios:
                 dp=1
             
         if args.relation=='Sinusoidal':
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -90,7 +90,7 @@ for p in args.noise_ratios:
                 dp=1
         
         if args.relation=='Two Sinusoidals':
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -109,7 +109,7 @@ for p in args.noise_ratios:
 
         if args.relation=='ZigZag':
             k=args.k
-            if p>random.random():
+            if p<random.random():
 
                 x= random.uniform(0,1)
                 y= random.uniform(0,1)
@@ -124,7 +124,7 @@ for p in args.noise_ratios:
         if args.relation=="Epicycloid":
             theta = np.arange(0, 360, .5)
             k=args.k
-            if p>random.random():
+            if p<random.random():
                 x= random.uniform(-k-2,k+1)
                 y= random.uniform(-k-2,k+1)
                 dp=0
@@ -137,7 +137,7 @@ for p in args.noise_ratios:
         if args.relation=="Hypocycloid":
             theta = np.arange(0, 360, .5)
             k=args.k
-            if p>random.random():
+            if p<random.random():
                 x= random.uniform(-k-2,k+1)
                 y= random.uniform(-k-2,k+1)
                 dp=0

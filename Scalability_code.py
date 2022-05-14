@@ -16,18 +16,25 @@ num_points_arr=[]
 
 num_slices_arr=[]
 num_slices=300
+dim=10
 
 ######## Define X and Y
+p=.5
 for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
     X=[]
     Y=[]
     actual_DP=[]
     for i in range(num_points):
-        
-        x= random.uniform(0,1)
+        if p>random.random():
+            x = np.random.randn(dim, 1)
+            z = np.random.randn(dim, 1)
+            y=(((np.matmul(np.ones((1,dim)),X)/np.sqrt(dim))*np.ones((dim,1)))+z)/np.sqrt(2)
+            dp=1
+        else:
+            x = np.random.randn(dim, 1)
+            y = np.random.randn(dim, 1)
 
-        y=x
-        dp=1
+            dp=0
     
 
 
