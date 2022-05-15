@@ -138,13 +138,26 @@ for p in args.noise_ratios:
             theta = np.arange(0, 360, .5)
             k=args.k
             if p<random.random():
-                x= random.uniform(-k-2,k+1)
-                y= random.uniform(-k-2,k+1)
+                x= random.uniform(-k-2,k)
+                y= random.uniform(-k-2,k)
                 dp=0
             else:
                 x=(k-1) *np.cos(theta[i]) - np.cos((k-1) *theta[i])
 
                 y=(k-1) *np.sin(theta[i]) - np.sin((k-1) *theta[i])
+                dp=1
+        
+        if args.relation=="Rose_Curve":
+            theta = np.arange(0, 360, .5)
+            k=args.k
+            if p<random.random():
+                x= random.uniform(-1,+1)
+                y= random.uniform(-1,+1)
+                dp=0
+            else:
+                x=np.cos(theta[i])* np.cos((k) *theta[i])
+
+                y=np.sin(theta[i]) * np.sin((k) *theta[i])
                 dp=1
 
 
