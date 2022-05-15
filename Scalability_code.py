@@ -92,7 +92,7 @@ for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
 
     
     DSI_val= DSI(X,Y, num_slices)
-    predictions=np.append(predictions,[DSI_val.detach().numpy()])
+    predictions=np.append(predictions,[DSI_val.detach().numpy()]) 
 
     # predictions = (predictions - np.min(predictions)) / (np.max(predictions) - np.min(predictions))
 
