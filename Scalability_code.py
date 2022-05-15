@@ -1,3 +1,4 @@
+from sys import ps1
 from pandas import *
 from utils import DSI,calc_TP_FP_rate
 import re
@@ -10,13 +11,24 @@ from sklearn.metrics import auc
 from sklearn.metrics import roc_curve
 from sklearn.neighbors import NearestNeighbors
 from sklearn.preprocessing import MinMaxScaler
+import argparse
+parser = argparse.ArgumentParser(description = 'ROC EXP')
+parser.add_argument('--relation', action='store', type=str, dest='relation', default='linear',
+                    help='m')
+parser.add_argument('--dim', action='store', type=int, dest='dim', default=10,
+                    help='m')
 
+parser.add_argument('--num_points_arr', action='store', dest='num_points_arr', default=[10,20,30,40,50,60,70,80,90,100,200,300,400,500,600,700,800,900,1000],
+                    help='m')
+parser.add_argument('--num_slices_arr', action='store', dest='num_slices_arr', default=[10,20,30,40,50,60,70,80,90,100,200,300,400,500,600,700,800,900,1000],
+                    help='m')
+args = parser.parse_args()
 
-num_points_arr=[]
+num_points_arr=args.num_points_arr
 
 num_slices_arr=[]
 num_slices=300
-dim=10
+dim=args.dim
 
 ######## Define X and Y
 p=.5
@@ -25,24 +37,49 @@ for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
     Y=[]
     actual_DP=[]
     for i in range(num_points):
-        if p>random.random():
-            x = np.random.randn(dim, 1)
-            z = np.random.randn(dim, 1)
-            y=(((np.matmul(np.ones((1,dim)),X)/np.sqrt(dim))*np.ones((dim,1)))+z)/np.sqrt(2)
-            dp=1
+        if args.relation=='linear':
+            if p>random.random():
+                x = np.random.randn(dim, 1)
+                z = np.random.randn(dim, 1)
+                y=(((np.matmul(np.ones((1,dim)),X)/np.sqrt(dim))*np.ones((dim,1)))+z)/np.sqrt(2)
+                dp=1
+            else:
+                x = np.random.randn(dim, 1)
+                y = np.random.randn(dim, 1)
+
+                dp=0
+        
+
+
+            X.append(np.array([x]))
+            Y.append(np.array([y]))
+            actual_DP.append(dp)
+
         else:
-            x = np.random.randn(dim, 1)
-            y = np.random.randn(dim, 1)
+            P1=np.random.randn(dim, 2)
+            P2=np.random.randn(dim, 2)
+            if p>random.random():
+                z1 = np.random.randn(dim, 1)
+                z2 = np.random.randn(dim, 1)
+                v = np.random.randn(2, 1)
 
-            dp=0
+
+                x=np.matmul(P1,v)+z1
+                y=np.matmul(P2,v)+z2
+                dp=1
+            else:
+                x = np.random.randn(dim, 1)
+                y = np.random.randn(dim, 1)
+
+                dp=0
+
     
-
-
-        X.append(np.array([x]))
-        Y.append(np.array([y]))
-        actual_DP.append(dp)
+    
+    
+    
     X=np.array(X)
     Y=np.array(Y)
+
 
 
 
