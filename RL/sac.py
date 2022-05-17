@@ -12,6 +12,7 @@ class SAC(object):
         self.gamma = args.gamma
         self.tau = args.tau
         self.alpha = args.alpha
+        self.lambda_dsi=args.lambda_dsi
 
         self.policy_type = args.policy
         self.target_update_interval = args.target_update_interval
@@ -76,7 +77,7 @@ class SAC(object):
         pi, log_pi, _ = self.policy.sample(state_batch)
 
 
-        DSI_loss= - DSI (torch.cat([state_batch, pi], 1), next_state_batch )
+        DSI_loss= - self.lambda_dsi * DSI (torch.cat([state_batch, pi], 1), next_state_batch )
 
         qf1_pi, qf2_pi = self.critic(state_batch, pi)
         min_qf_pi = torch.min(qf1_pi, qf2_pi)
