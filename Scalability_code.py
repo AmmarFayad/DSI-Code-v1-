@@ -55,7 +55,7 @@ for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
             Y.append(np.array([y]))
             actual_DP.append(dp)
 
-        else:
+        if args.relation=='common_signal':
             P1=np.random.randn(dim, 2)
             P2=np.random.randn(dim, 2)
             if p>random.random():
@@ -70,6 +70,24 @@ for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
             else:
                 x = np.random.randn(dim, 1)
                 y = np.random.randn(dim, 1)
+
+                dp=0
+
+        if args.relation=='elliptical':
+            
+            P=np.random.randn(dim, dim)
+            if p>random.random():
+                x = np.random.rand(dim, 1)
+                x/=x.norm(p=2, dim=1, keepdim=True)
+                
+                y=np.matmul(P,x)
+                dp=1
+            else:
+                x = np.random.rand(dim, 1)
+                x/=x.norm(p=2, dim=1, keepdim=True)
+
+                y = np.random.rand(dim, 1)
+                y/=y.norm(p=2, dim=1, keepdim=True)
 
                 dp=0
 
