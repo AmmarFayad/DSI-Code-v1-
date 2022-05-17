@@ -92,7 +92,7 @@ for num_points in num_points_arr: #[num_ponts], [dim], [num_slices]
                 dp=0
 
     
-    
+     
     
     
     X=np.array(X)
